@@ -39,6 +39,9 @@ https://github.com/symfony/symfony/pull/27609
 - API documentation with Swager 
 - Add cache to the API
 - Use ajax into the Admin panel
+- Use Solr or Elasticsearch if we want a bigger project
+- Use a Queue Messaging System
+- Log some requests
 
 ## Project creation - Good to Know - Tips
 - docker-compose up -d
