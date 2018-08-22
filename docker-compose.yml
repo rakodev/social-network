@@ -1,0 +1,101 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: "3.1"
+services:
+
+    sn-memcached:
+      image: memcached:alpine
+      container_name: sn-memcached
+
+    sn-mariadb:
+      image: mariadb:10.1
+      container_name: sn-mariadb
+      working_dir: /application
+      volumes:
+        - ./Projects:/application
+      environment:
+        - MYSQL_ROOT_PASSWORD=docker
+        - MYSQL_DATABASE=test
+        - MYSQL_USER=docker
+        - MYSQL_PASSWORD=docker
+      ports:
+        - "8012:3306"
+
+    sn-phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: sn-phpmyadmin
+      environment:
+        - PMA_ARBITRARY=1
+        - PMA_HOST=sn-mariadb
+        - PMA_PORT=3306
+        - MYSQL_USER=docker
+        - MYSQL_PASSWORD=docker
+        - MYSQL_ROOT_PASSWORD=docker
+      restart: always
+      ports:
+          - 8013:80
+      volumes:
+          - /application
+      links:
+          - sn-mariadb
+
+#    rabbitmq:
+#        image: "rabbitmq:3-management"
+#        hostname: "rabbitmq"
+#        environment:
+#            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+#            RABBITMQ_DEFAULT_USER: "rabbitmq"
+#            RABBITMQ_DEFAULT_PASS: "rabbitmq"
+#            RABBITMQ_DEFAULT_VHOST: "/"
+#        ports:
+#          - "15672:15672"
+#          - "5672:5672"
+#        labels:
+#          NAME: "rabbitmq"
+
+# docker-compose exec sn-webserver-api sh
+# docker exec -it sn-webserver-api nginx -s reload
+    sn-webserver-api:
+      image: nginx:alpine
+      container_name: sn-webserver-api
+      working_dir: /application
+      volumes:
+          - ./Projects/Api:/application/api
+          - ./Docker/nginx/api.conf:/etc/nginx/conf.d/api.conf
+      ports:
+          - "8010:8080"
+
+# docker-compose exec sn-webserver-admin sh
+# docker exec -it sn-webserver-admin nginx -s reload
+    sn-webserver-admin:
+      image: nginx:alpine
+      container_name: sn-webserver-admin
+      working_dir: /application2
+      volumes:
+          - ./Projects/Admin:/application2/admin
+          - ./Docker/nginx/admin.conf:/etc/nginx/conf.d/admin.conf
+      ports:
+          - "8011:8080"
+
+# docker-compose exec sn-php-fpm-api bash
+# /etc/init.d/php7.2-fpm reload
+    sn-php-fpm-api:
+      build: Docker/sn-php-fpm-api
+      container_name: sn-php-fpm-api
+      working_dir: /application
+      volumes:
+          - ./Projects:/application
+          - ./Docker/sn-php-fpm-api/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+
+# docker-compose exec sn-php-fpm-admin bash
+# /etc/init.d/php7.2-fpm reload
+    sn-php-fpm-admin:
+      build: Docker/sn-php-fpm-admin
+      container_name: sn-php-fpm-admin
+      working_dir: /application2
+      volumes:
+          - ./Projects:/application2
+          - ./Docker/sn-php-fpm-admin/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+
+

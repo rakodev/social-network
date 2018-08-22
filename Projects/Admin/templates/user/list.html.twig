@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User List{% endblock %}
+
+{% block body %}
+    {#<div>#}
+        {#{{ dump(response) }}#}
+    {#</div>#}
+    <h1>Users list</h1>
+
+    <table class="table table-striped">
+        <thead class="thead-light">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Created At</th>
+            <th>User Connections/th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.created_at }}</td>
+                <td><a href="{{ path('user_connections',{userId: user.id}) }}">Connections</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'paginate.twig' %}
+
+{% endblock %}

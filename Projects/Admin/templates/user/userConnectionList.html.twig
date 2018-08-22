@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Connections list{% endblock %}
+
+{% block body %}
+    <h1>User Connections list</h1>
+
+    <table class="table table-striped">
+        <thead class="thead-light">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Created At</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.created_at }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Social Network Admin Panel{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+    <header>
+        {% include 'menu.twig' %}
+        </header>
+        <main role="main" class="container">
+            {% block body %}{% endblock %}
+        </main>
+        <footer class="footer"></footer>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
